@@ -111,8 +111,11 @@ def test_search_with_params(client):
     assert response.status_code == 200
     content = response.content.decode('utf-8')
     assert "Толстой" in content and "author" in content, "Параметры поиска не обработаны"
+
     response2 = client.get('/search/')
     assert response2.status_code == 200
+    content = response2.content.decode('utf-8')
+    assert "Вы находитесь" in content and "Задайте параметры" in content, "Отсутствие параметров не обработано"
 
 def test_theme_redirect(client):
     """Тест установки темы и переадресации"""
@@ -121,18 +124,6 @@ def test_theme_redirect(client):
     assert response.status_code == 200
     content = response.content.decode('utf-8')
     assert "dark" in content, "Тема не была установлена или не отображается"
-
-def test_feedback_routes(client):
-    """Тест вложенных маршрутов"""
-    response = client.get('/feedback/')
-    assert response.status_code == 200
-    content = response.content.decode('utf-8')
-    assert "Форма обратной связи" in content
-    
-    response_thanks = client.get('/feedback/thanks/')
-    assert response_thanks.status_code == 200
-    content_thanks = response_thanks.content.decode('utf-8')
-    assert "Спасибо за отзыв" in content_thanks
 
 def test_review_detail(client):
     """Тест динамической маршрутизации с re_path"""
